@@ -1,4 +1,3 @@
-// creer un array d'objet immobile (rectangle) et un array d'objet mobile (balle et player)
 function universe(size, g){
 	var r_score = 12;
 	this.score_max = 6;
@@ -9,89 +8,113 @@ function universe(size, g){
 	this.jouable = new vector(size.x, size.y - this.y_sol);
 	this.filet = new rectangle(new vector(this.jouable.x/2-8, this.jouable.y-145),new vector(16, 150));
 	this.pause = true;
-	this.ctx_t = document.getElementById('terrain').getContext('2d');
+	this.ctx_decors = document.getElementById('decors').getContext('2d');	//contenu visible mais pas collisionnable
+	this.ctx_objet = document.getElementById('objet').getContext('2d');		//contenu visible et collisionnable
+	var ListeComSetJst = ["<NAME> arrache la manche gagnante !"];
+	var ListeComSetStd = ["<NAME> remporte la manche"];
+	var ListeComSetPft = ["<NAME> réalise une manche parfaite !"];
 	
+	var ListeComJst = ["C'est juste, mais ça passe", "Victoire sur le fils pour <NAME>"];
+	var ListeComStd = ["C'est à peine étonnant...", "Ça va pas être facile de s'en remettre"];
+	var ListeComPft = ["Partie parfaite !", "<NAME> écrase son adversaire !"];
+
 	this.drawJeu = function(){
-		this.ctx_t.lineWidth = 2;
-		this.ctx_t.strokeStyle = "black";
+		this.ctx_decors.lineWidth = 2;
+		this.ctx_decors.strokeStyle = "black";
 		
 //ciel
-		var grad_ciel = this.ctx_t.createRadialGradient(0, 0, 25, 5, 5, 150);
+		var grad_ciel = this.ctx_decors.createRadialGradient(0, 0, 25, 5, 5, 150);
 		grad_ciel.addColorStop(0, 'yellow');
 		grad_ciel.addColorStop(0.2, 'white');
 		grad_ciel.addColorStop(1, "deepskyblue");
-		this.ctx_t.fillStyle = grad_ciel;
-		this.ctx_t.fillRect(0, 0, this.jouable.x, this.jouable.y);
+		this.ctx_decors.fillStyle = grad_ciel;
+		this.ctx_decors.fillRect(0, 0, this.jouable.x, this.jouable.y);
 //sol
 		var image_sol = new Image();
 		image_sol.onload = function(){
 			for(var i=0; i<= 19; i++){
-				env.ctx_t.drawImage(image_sol, i*50, env.jouable.y-1);
+				env.ctx_objet.drawImage(image_sol, i*50, env.jouable.y-1);
 			}
-			//filet
-			env.filet.draw(env.ctx_t);
+//filet
+			env.filet.draw(env.ctx_objet);
 		};
 		image_sol.src = "images/grass.png";
 //score joueur 1
-		this.ctx_t.drawScore(40, 20, p1.score, this.score_max, r_score, 5, "green", 0);
+		this.ctx_decors.drawScore(40, 20, p1.score, this.score_max, r_score, 5, "green", 0);
 
 //score joueur 2
 		var posx = this.size.x-40-(this.score_max+1)*2.5*r_score;
-		this.ctx_t.drawScore(posx, 20, p2.score, this.score_max, r_score, 5, "blue", 1);
+		this.ctx_decors.drawScore(posx, 20, p2.score, this.score_max, r_score, 5, "blue", 1);
 
 //manche
-		this.ctx_t.roundRect(env.size.x/2-100, 12, 200, 85, 10);
-		this.ctx_t.fillStyle = "maroon"
-		this.ctx_t.fill();
-		this.ctx_t.lineWidth = 4;
-		this.ctx_t.stroke();
-		this.ctx_t.font = "60pt Fluid LCD";
-		this.ctx_t.textAlign = 'center';
-		this.ctx_t.fillStyle = "red";
-		this.ctx_t.lineWidth = 1;
-		this.ctx_t.strokeStyle = "lightcoral"
-		this.ctx_t.fillText(p1.manche+"  "+p2.manche, env.size.x/2, 80);
-		this.ctx_t.strokeText(p1.manche+"  "+p2.manche, env.size.x/2, 80);
+		this.ctx_decors.roundRect(env.size.x/2-100, 12, 200, 85, 10);
+		this.ctx_decors.fillStyle = "maroon"
+		this.ctx_decors.fill();
+		this.ctx_decors.lineWidth = 4;
+		this.ctx_decors.stroke();
+		this.ctx_decors.font = "60pt Fluid LCD";
+		this.ctx_decors.textAlign = 'center';
+		this.ctx_decors.fillStyle = "red";
+		this.ctx_decors.lineWidth = 1;
+		this.ctx_decors.strokeStyle = "lightcoral"
+		this.ctx_decors.fillText(p1.manche+"  "+p2.manche, env.size.x/2, 80);
+		this.ctx_decors.strokeText(p1.manche+"  "+p2.manche, env.size.x/2, 80);
 	}
+	
+	var posText = new vector(this.size.x/2, this.size.y/2-90);
+	var Interligne = 30;
+	var Typo = "20pt rough_typewriter";
+	
 	this.drawStart = function(){
-		this.ctx_t.drawText("Hemi Volley", this.size.x/2, this.size.y/2-40, "80pt Sketch Coursive");
-		this.ctx_t.drawText("Appuyer sur P pour commencer", this.size.x/2, this.size.y/2+20, "20pt rough_typewriter");
-		this.ctx_t.drawText("une nouvelle partie", this.size.x/2, this.size.y/2+40, "20pt rough_typewriter");		
+		this.ctx_decors.font = Typo;
+		this.ctx_decors.drawText("Appuyer sur P pour commencer", posText.x, posText.y);
+		this.ctx_decors.drawText('une nouvelle partie', posText.x, posText.y+Interligne);		
 	}
 	this.drawMenuPause = function(){
-		this.ctx_t.drawText("Hemi Volley", this.size.x/2, this.size.y/2-40, "80pt Sketch Coursive");
-		this.ctx_t.drawText("Jeu en pause", this.size.x/2, this.size.y/2+20, "20pt rough_typewriter");
-		this.ctx_t.drawText("Appuyer sur P pour continuer", this.size.x/2, this.size.y/2+40, "20pt rough_typewriter");
+		this.ctx_decors.font = Typo;
+		this.ctx_decors.drawText("Jeu en pause", posText.x, posText.y);
+		this.ctx_decors.drawText("Appuyer sur P pour continuer", posText.x, posText.y+Interligne);
 	}
-	this.drawVainqueur = function(){
-		if(p1.score == this.score_max){
-			var Vainqueur = "Player 1";
-			p1.manche++;
+	this.drawVainqueur = function(Vainqueur, diff){
+		this.ctx_decors.font = Typo;
+		this.ctx_decors.fillStyle = "black";
+		if(diff <=1){
+			i = Math.round((ListeComSetJst.length-1)*Math.random());
+			this.ctx_decors.fillText(this.CreaTexteVictoire(ListeComSetJst[i], Vainqueur), posText.x, posText.y);
+		}else if(diff == this.manche_max){
+			i = Math.round((ListeComSetPft.length-1)*Math.random());
+			this.ctx_decors.fillText(this.CreaTexteVictoire(ListeComSetPft[i], Vainqueur), posText.x, posText.y);
 		}else{
-			var Vainqueur = "Player 2";
-			p2.manche++;
+			i = Math.round((ListeComSetStd.length-1)*Math.random());
+			this.ctx_decors.fillText(this.CreaTexteVictoire(ListeComSetStd[i], Vainqueur), posText.x, posText.y);
 		}
-		if(p1.manche < this.manche_max && p2.manche < this.manche_max){
-			this.drawJeu();
-			this.ctx_t.drawText(Vainqueur+" remporte la manche !", this.size.x/2, this.size.y/2-40, "30pt rough_typewriter");
-			this.ctx_t.drawText("Appuyer sur P pour lancer", this.size.x/2, this.size.y/2, "30pt rough_typewriter");
-			this.ctx_t.drawText("la prochaine manche", this.size.x/2, this.size.y/2+40, "30pt rough_typewriter");
-		}
+		this.ctx_decors.drawText("Appuyer sur P pour lancer", posText.x, posText.y+Interligne);
+		this.ctx_decors.drawText("la prochaine manche", posText.x, posText.y+2*Interligne);
 	}
-	this.drawVainqueurFinal = function(){
-		if(p1.manche == this.manche_max){
-			var Vainqueur = "Player1";
+	this.drawVainqueurFinal = function(Vainqueur, diff){
+		this.ctx_decors.font = Typo;
+		this.ctx_decors.fillStyle = "black";
+		if(diff <=1){
+			i = Math.round((ListeComJst.length-1)*Math.random());
+			this.ctx_decors.fillText(ListeComJst[i], posText.x, posText.y);
+		}else if(diff == this.manche_max){
+			i = Math.round((ListeComPft.length-1)*Math.random());
+			this.ctx_decors.fillText(ListeComPft[i], posText.x, posText.y);
 		}else{
-			var Vainqueur = "Player2";
+			i = Math.round((ListeComStd.length-1)*Math.random());
+			this.ctx_decors.fillText(ListeComStd[i], posText.x, posText.y);
 		}
-		this.clearAll();
-		this.drawJeu();
-		this.ctx_t.font = "30pt rough_typewriter";
-		this.ctx_t.fillStyle = "black";
-		this.ctx_t.fillText(Vainqueur+" remporte la partie !", this.size.x/2, this.size.y/2);
-		this.ctx_t.fillText("C'est à peine étonnant...", this.size.x/2, this.size.y/2+40);
 	}
 	this.clearAll = function(){
-		this.ctx_t.clearRect(0, 0, this.size.x, this.size.y);
+		this.ctx_decors.clearRect(0, 0, this.size.x, this.size.y);
+	}
+	
+	this.CreaTexteVictoire=function(Texte, VainqueurName){
+			if(/<NAME>/i.test(Texte)){
+				i = Texte.indexOf("<NAME>");
+				return Texte.substring(0, i)+VainqueurName+Texte.substring(i+6);
+			}else{
+				return Texte;
+			}
 	}
 }

@@ -121,55 +121,59 @@ function ball(p0, v0, rayon, context_name){
 		}
 // contact entre joueur 1 et balle
 		if(p1.canCollide <= 0){		//tempo en cas de rebonds limite
-			// var n_m_p1 = n_m;
-			// n_m_p1.v.add(p1.m.v);
-			if(p1.willCollide(n_m)){
+			if(this.m.p.distance(p1.m.p)<this.m.rayon+p1.m.rayon){ //evite le test willcollide si la ball est trop loin
+				if(p1.willCollide(this.ctx_b)){
 				//balle présentement au dessus
-				if(p1.m.p.y > this.m.p.y){
-					var t = new vector(p1.m.p.y-this.m.p.y,this.m.p.x-p1.m.p.x);
-				}else{
-					//balle présentement juste en dessous
-					if(Math.abs(p1.m.p.x-this.m.p.x) < p1.m.rayon){
-						var t = new vector(1, 0);
+					if(p1.m.p.y > this.m.p.y){
+						var t = new vector(p1.m.p.y-this.m.p.y,this.m.p.x-p1.m.p.x);
 					}else{
-						if(p1.m.p.x < this.m.p.x){
-							var t = new vector(p1.m.p.y-this.m.p.y,this.m.p.x-p1.m.rayon-p1.m.p.x);
+				//balle présentement juste en dessous
+						if(Math.abs(p1.m.p.x-this.m.p.x) < p1.m.rayon){
+							var t = new vector(1, 0);
 						}else{
-							var t = new vector(p1.m.p.y-this.m.p.y,this.m.p.x+p1.m.rayon-p1.m.p.x);
+							if(p1.m.p.x < this.m.p.x){
+								var t = new vector(p1.m.p.y-this.m.p.y,this.m.p.x-p1.m.rayon-p1.m.p.x);
+							}else{
+								var t = new vector(p1.m.p.y-this.m.p.y,this.m.p.x+p1.m.rayon-p1.m.p.x);
+							}
 						}
 					}
-				}
-				n_m.v = this.getRebond(n_m.v, t);
-				n_m.v.add(p1.m.v, 2*this.m.rayon/p1.m.rayon);
-				if(!p1.service){
-					p1.nb_touche++;	
-					p2.nb_touche=0;
+					n_m.v = this.getRebond(n_m.v, t);
+					n_m.v.add(p1.m.v, 2*this.m.rayon/p1.m.rayon);
+					if(!p1.service){
+						p1.nb_touche++;	
+						p2.nb_touche=0;
+						p1.drawTouche();
+						p2.drawTouche();
+					}
 				}
 			}
 		}
 // contact entre joueur 2 et balle
 		if(p2.canCollide <= 0){		//tempo en cas de rebonds limite
-			// var n_m_p2 = n_m;
-			// n_m_p2.v.add(p2.m.v);
-			if(p2.willCollide(n_m)){
-				if(p2.m.p.y > this.m.p.y){
-					var t = new vector(p2.m.p.y-this.m.p.y,this.m.p.x-p2.m.p.x);
-				}else{
-					if(Math.abs(p2.m.p.x-this.m.p.x) < p2.m.rayon){
-						var t = new vector(1, 0);
+			if(this.m.p.distance(p2.m.p)<this.m.rayon+p2.m.rayon){ //evite le test willCollide si la ball est trop loin
+				if(p2.willCollide(this.ctx_b)){
+					if(p2.m.p.y > this.m.p.y){
+						var t = new vector(p2.m.p.y-this.m.p.y,this.m.p.x-p2.m.p.x);
 					}else{
-						if(p2.m.p.x < this.m.p.x){
-							var t = new vector(p2.m.p.y-this.m.p.y,this.m.p.x-p2.m.rayon-p2.m.p.x);
+						if(Math.abs(p2.m.p.x-this.m.p.x) < p2.m.rayon){
+							var t = new vector(1, 0);
 						}else{
-							var t = new vector(p2.m.p.y-this.m.p.y,this.m.p.x+p2.m.rayon-p2.m.p.x);
+							if(p2.m.p.x < this.m.p.x){
+								var t = new vector(p2.m.p.y-this.m.p.y,this.m.p.x-p2.m.rayon-p2.m.p.x);
+							}else{
+								var t = new vector(p2.m.p.y-this.m.p.y,this.m.p.x+p2.m.rayon-p2.m.p.x);
+							}
 						}
 					}
-				}
-				n_m.v = this.getRebond(n_m.v, t);
-				n_m.v.add(p2.m.v, 2*this.m.rayon/p2.m.rayon);
-				if(!p2.service){
-					p2.nb_touche++;
-					p1.nb_touche=0;
+					n_m.v = this.getRebond(n_m.v, t);
+					n_m.v.add(p2.m.v, 2*this.m.rayon/p2.m.rayon);
+					if(!p2.service){
+						p2.nb_touche++;
+						p1.nb_touche=0;
+						p1.drawTouche();
+						p2.drawTouche();
+					}
 				}
 			}
 		}
