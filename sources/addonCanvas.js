@@ -1,4 +1,4 @@
-ctx = document.getElementById('terrain').getContext('2d');
+ctx = document.getElementById('decors').getContext('2d');
 if(!ctx.roundRect){
 	ctx.roundRect = function(x, y, width, height, radius){
 		radius = typeof radius !== "undefined" ? radius : 5;

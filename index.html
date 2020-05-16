@@ -2,16 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title> HemiVolley HTML5 version 1.0 </title>
+		<title> HemiVolley HTML5 version 1.1 </title>
 		<link rel="stylesheet" href="deco.css" />
 		<!--[if lt IE 9]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>
-
 	<body onload="init();">
 		<header>
-			<h1> Hemi Volley 1.0</h1>
+			<h1> Hemi Volley</h1>
 		</header>
 		<nav>
 			<ul>
@@ -22,7 +21,8 @@
 		</nav>
 		<section>
 			<div class="gameLayer">
-				<canvas id="terrain" width="1000" height="500"></canvas>
+				<canvas id="decors" width="1000" height="500"></canvas>
+				<canvas id="objet" width="1000" height="500"></canvas>
 				<canvas id="player" width="1000" height="500"></canvas>
 				<canvas id="ball" width="1000" height="500"></canvas>
 			</div>
@@ -30,14 +30,31 @@
 		<aside>
 			<h2>Contrôles</h2>
 			<ul>
-				<li>q z d : contrôle joueur 1</li>
-				<li>&lt; ^ &gt; : contrôle joueur 2</li>
-				<li>p : pause</li>
-				<li>espace : service</li>
+				<li>q z d : <span class="aligndroit">contrôle joueur 1</span></li>
+				<li>&lt; ^ &gt; : <span class="aligndroit">contrôle joueur 2</span></li>
+				<li id="pauseligne">p : <span class="aligndroit">pause</span></li>
+				<li>espace : <span class="aligndroit">service</span></li>
 			</ul>
+		<form>
+			<h2>Joueur 1</h2>
+			<ul>
+				<li>Nom : <INPUT onchange="NamePlayer1Change()" id="name1" type="text" value="Michel"></li>
+				<li>Couleur : <INPUT onchange="ColorPlayer1Change()" id="color1" type="text" value="lightgreen"></li>
+			</ul>
+			<h2>Joueur 2</h2>
+			<ul>
+				<li>Nom : <INPUT onchange="NamePlayer2Change()" id="name2" type="text" value="Jacky"></li>
+				<li>Couleur : <INPUT onchange="ColorPlayer2Change()" id="color2" type="text" value="lightblue"></li>
+			</ul>
+			<h2>Dimension du match</h2>
+			<ul>
+				<li>Set : <INPUT onchange="NumberSetChange()" id="SetNumber" type="text" value="6"></li>
+				<li>Manche : <INPUT onchange="NumberMancheChange()" id="MancheNumber" type="text" value="3"></li>
+			</ul>
+		</form>
 		</aside>
 		<footer>
-			<p>Version 1.0, réalisé par Manu</p>
+			<p>Version 1.1, réalisé par Manu</p>
 		</footer>
 		<script src="sources/addonCanvas.js"></script>
 		<script src="sources/vector.js"></script>

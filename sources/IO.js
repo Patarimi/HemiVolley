@@ -28,25 +28,36 @@ function animate(){
 		env.drawJeu();
 		p1.nb_touche = 0;
 		p2.nb_touche = 0;
-	}	
-//un joueur remporte la manche
-	if(p1.score == env.score_max || p2.score == env.score_max){
-		env.pause = "true";
-		if(p1.score == env.score_max)
-			p1.service = true;
-		else
-			p2.service = true;
-		env.drawVainqueur();
-		p1.score = 0;
-		p2.score = 0;
 	}
+	
+//Ajout des bonus
+
 //un joueur a gagné
 	if(p1.manche == env.manche_max || p2.manche == env.manche_max){
 		env.pause = "true";
-		env.drawVainqueurFinal();
+		if(p1.manche == env.manche_max){
+			env.drawVainqueurFinal(p1.name, p1.manche-p2.manche);
+		}else{
+			env.drawVainqueurFinal(p2.name, p1.manche-p2.manche);
+		}
 		p1.manche = 0;
 		p2.manche = 0;
+	}else if(p1.score == env.score_max || p2.score == env.score_max){
+//un joueur remporte la manche
+		env.pause = "true";
+		if(p1.score == env.score_max){
+			p1.manche++;
+			p1.service = true;
+			env.drawVainqueur(p1.name, p1.score-p2.score);
+		}else{
+			p2.manche++;
+			p2.service = true;
+			env.drawVainqueur(p2.name, p2.score-p1.score);
+		}
+		p1.score = 0;
+		p2.score = 0;
 	}
+
 	if(!env.pause)
 		window.requestAnimFrame(function() {
 			animate()
@@ -56,6 +67,10 @@ function animate(){
 window.onkeydown = function(event) {
 	var e = event || window.event;
 	var key = e.which || e.keyCode;
+	var target = e.target;
+	if(target.id != ""){
+		return 0;
+	}
 	switch(key){
 		case 37 :				//fleche de gauche
 			if(!env.pause && p2.m.p.x > p2.min.x){
@@ -93,6 +108,7 @@ window.onkeydown = function(event) {
 			env.pause = !env.pause;
 			if(env.pause){
 				env.drawMenuPause();
+				BlinkPause("pouet");
 			}else{
 				env.clearAll();
 				env.drawJeu();
@@ -132,4 +148,50 @@ window.onkeyup = function(event) {
 				p1.m.v.x = 0;
 		break;
 	}
+}
+
+function NamePlayer1Change(){
+	var Name = document.getElementById("name1").value;
+	if(Name!="")
+		p1.name = Name;
+}
+
+function NamePlayer2Change(){
+	var Name = document.getElementById("name2").value;
+	if(Name!="")
+		p2.name = Name;
+}
+
+function ColorPlayer1Change(){
+	var Color = document.getElementById("color1").value;
+	if(Color!=""){
+		p1.bodyColor = Color;
+		p1.preDraw();
+	}
+}
+
+function ColorPlayer2Change(){
+	var Color = document.getElementById("color2").value;
+	if(Color!=""){
+		p2.bodyColor = Color;	
+		p2.preDraw();
+	}
+}
+
+function NumberSetChange(){
+	var Score = parseInt(document.getElementById("SetNumber").value);
+	if(Score!=""){
+		env.score_max = Score;
+		env.drawJeu();
+	}
+}
+function BlinkPause(newtexte){
+	var zonepause = document.getElementById("pauseligne");
+	zonepause.style.backgroundColor = 'red';
+	setTimeout(BackToNormal, 200);
+}
+
+function BackToNormal(){
+	var zonepause = document.getElementById("pauseligne");
+	zonepause.style.backgroundColor = '#dddddd';
 }

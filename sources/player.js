@@ -1,19 +1,21 @@
-function player(p0, v0, rayon, context_name, body_Color, eye_Color){
+function player(p0, v0, rayon, context_name){
 	this.m = new mobile(p0, v0, rayon);
 	this.score = 0;
 	this.manche = 0;
 	this.nb_touche = 0;
 	this.service = false;
 	this.canCollide = 0;
+	this.name = "Player";
 	var ctx_m = document.getElementById(context_name).getContext('2d');
 	var preRenduC = document.createElement('canvas');
-	preRenduC.width = 2*rayon+2;
-	preRenduC.height = rayon+2;
+		preRenduC.width = 2*rayon+2;
+		preRenduC.height = rayon+2;
 	var preRendu = preRenduC.getContext('2d');
+	var preRenduImg;
 //http://www.html5rocks.com/en/tutorials/canvas/performance/
 
-	var bodyColor = typeof body_Color !== "undefined" ? body_Color : "yellow";
-	var eyeColor = typeof eye_Color !== "undefined" ? eye_Color : "maroon";
+	this.bodyColor = "yellow";
+	this.eyeColor = "maroon";
 	
 	if(p0.x > env.size.x/2){		//joueur de droite
 		this.dir = -1;
@@ -29,10 +31,10 @@ function player(p0, v0, rayon, context_name, body_Color, eye_Color){
 
 	this.getNextSpeed = function(){
 		var n_v = this.m.getNextSpeed(env.g);
-		if(this.m.p.y>=this.max.y && n_v.y > 0){
+		if(this.m.p.y>=this.max.y && n_v.y > 0){	//joueur au sol
 			n_v.y = 0;
 		}
-		if(this.m.p.x > this.max.x || this.m.p.x < this.min.x){
+		if(this.m.p.x > this.max.x || this.m.p.x < this.min.x){	//joueur à une extremité
 			n_v.x = 0;
 		}
 		return n_v;
@@ -50,7 +52,7 @@ function player(p0, v0, rayon, context_name, body_Color, eye_Color){
 		preRendu.beginPath();
 		preRendu.arc(this.m.rayon+1, this.m.rayon+1, this.m.rayon, Math.PI, 0);
 		preRendu.lineTo(1, this.m.rayon+1);
-		preRendu.fillStyle = bodyColor;
+		preRendu.fillStyle = this.bodyColor;
 		preRendu.fill();
 		preRendu.stroke();
 //oeil
@@ -59,10 +61,14 @@ function player(p0, v0, rayon, context_name, body_Color, eye_Color){
 		preRendu.fillStyle = "white";
 		preRendu.fill();
 		preRendu.stroke();
+		preRenduImg = preRendu.getImageData(0, 0, preRenduC.width, preRenduC.height);
 	}
+	var x_min_clear = this.min.x-this.m.rayon-1;
+	var x_max_clear = this.max.x-this.min.x+2*this.m.rayon+3;
+	var y_max_clear = env.size.y-env.y_sol+2;
 	this.draw = function(){
 		this.m.p = this.getNextPosition();
-		ctx_m.clearRect(this.min.x-this.m.rayon-1, 0, this.max.x-this.min.x+2*this.m.rayon+3, env.size.y);
+		ctx_m.clearRect(x_min_clear, 0, x_max_clear, y_max_clear);
 		ctx_m.drawImage(preRenduC, this.m.p.x-this.m.rayon, this.m.p.y-this.m.rayon);
 //pupille
 		ctx_m.beginPath();
@@ -74,32 +80,39 @@ function player(p0, v0, rayon, context_name, body_Color, eye_Color){
 		ctx_m.arc(-5, 0, 0.1*this.m.rayon, 2*Math.PI, 0);
 		ctx_m.fillStyle = "black";
 		ctx_m.fill();
-		ctx_m.strokeStyle = eyeColor;
+		ctx_m.strokeStyle = this.eyeColor;
 		ctx_m.lineWidth = 3;
 		ctx_m.stroke();
 		ctx_m.restore();
+//filtre anti-"rebonds"
+		if(this.canCollide > 0)
+			this.canCollide--;
+	}
+	this.drawTouche = function(){
 //nombre de touche de balle
+		ctx_m.clearRect(x_min_clear, y_max_clear, x_max_clear, env.size.y);
 		if(this.nb_touche > 0){
 			ctx_m.font = "20pt rough_typewriter";
 			ctx_m.fillStyle = "white";
 			ctx_m.textAlign = "center";
 			ctx_m.fillText("touche : "+this.nb_touche, env.jouable.x/2 - this.dir*env.jouable.x/4, env.jouable.y + 30);
 		}
-//filtre anti-"rebonds"
-		if(this.canCollide > 0)
-			this.canCollide--;
+	}
+	this.willCollide = function(ctx){
+		var w = preRenduC.width;
+		var h = preRenduC.height;
+		var collide = false;
+		var ctxImg = ctx.getImageData(this.m.p.x-this.m.rayon, this.m.p.y-this.m.rayon, w, h);
+		for(i=3;i<=w*h;i+=4){
+			if(preRenduImg.data[i]!=0){
+				if(ctxImg.data[i]!=0){
+					this.canCollide = 8;
+					collide = true;
+					break;
+				}
+			}
+		}
+		return collide;
 	}
 	
-	this.willCollide = function(mob){
-		var collide_up = this.m.p.y > mob.p.y && this.m.p.distance(mob.p) < this.m.rayon+mob.rayon;
-		var collide_under = this.m.p.y < mob.p.y && Math.abs(this.m.p.y - mob.p.y) < mob.rayon && Math.abs(this.m.p.x - mob.p.x) < this.m.rayon+mob.rayon;
-		var collide_left = this.m.p.y < mob.p.y && mob.p.distance(new vector(this.m.p.x-this.m.rayon, this.m.p.y)) < mob.rayon;
-		var collide_right = this.m.p.y < mob.p.y && mob.p.distance(new vector(this.m.p.x+this.m.rayon, this.m.p.y)) < mob.rayon;
-		if(collide_up || collide_under || collide_right || collide_left){
-			this.canCollide = 3;
-			return true;
-		}else{
-			return false;
-		}
-	}
 }
