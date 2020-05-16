@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title> HemiVolley HTML5 version 1.0 </title>
+		<link rel="stylesheet" href="deco.css" />
+		<!--[if lt IE 9]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body onload="init();">
+		<header>
+			<h1> Hemi Volley 1.0</h1>
+		</header>
+		<nav>
+			<ul>
+				<li><a>test</a></li>
+				<li><a>test</a></li>
+				<li><a>test</a></li>
+			</ul>
+		</nav>
+		<section>
+			<div class="gameLayer">
+				<canvas id="terrain" width="1000" height="500"></canvas>
+				<canvas id="player" width="1000" height="500"></canvas>
+				<canvas id="ball" width="1000" height="500"></canvas>
+			</div>
+		</section>
+		<aside>
+			<h2>Contrôles</h2>
+			<ul>
+				<li>q z d : contrôle joueur 1</li>
+				<li>&lt; ^ &gt; : contrôle joueur 2</li>
+				<li>p : pause</li>
+				<li>espace : service</li>
+			</ul>
+		</aside>
+		<footer>
+			<p>Version 1.0, réalisé par Manu</p>
+		</footer>
+		<script src="sources/addonCanvas.js"></script>
+		<script src="sources/vector.js"></script>
+		<script src="sources/mobile.js"></script>
+		<script src="sources/rectangle.js"></script>
+		<script src="sources/universe.js"></script>
+		<script src="sources/player.js"></script>
+		<script src="sources/ball.js"></script>
+		<script src="sources/IO.js"></script>
+		<script src="hemivolley.js"></script>
+	</body>
+</html>
