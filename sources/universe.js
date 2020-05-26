@@ -48,7 +48,7 @@ function universe(size, g){
 
 //manche
 		this.ctx_decors.roundRect(env.size.x/2-100, 12, 200, 85, 10);
-		this.ctx_decors.fillStyle = "maroon"
+		this.ctx_decors.fillStyle = "maroon";
 		this.ctx_decors.fill();
 		this.ctx_decors.lineWidth = 4;
 		this.ctx_decors.stroke();
@@ -56,7 +56,7 @@ function universe(size, g){
 		this.ctx_decors.textAlign = 'center';
 		this.ctx_decors.fillStyle = "red";
 		this.ctx_decors.lineWidth = 1;
-		this.ctx_decors.strokeStyle = "lightcoral"
+		this.ctx_decors.strokeStyle = "lightcoral";
 		this.ctx_decors.fillText(p1.manche+"  "+p2.manche, env.size.x/2, 80);
 		this.ctx_decors.strokeText(p1.manche+"  "+p2.manche, env.size.x/2, 80);
 	}

@@ -25,7 +25,7 @@ if(!ctx.drawScore){
 		var length_tot = score_max*2.5*r_score+2*margin;
 		ctx.roundRect(posx, posy, length_tot, 2*r_score+2*margin);
 		ctx.stroke();
-		ctx.fillStyle = "rgba(0, 0, 0, 0.2)"
+		ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
 		ctx.fill();
 		var grad_pt = ctx.createLinearGradient(posx, 0, posx+length_tot, 0);
 		grad_pt.addColorStop(1-dir, "black");
