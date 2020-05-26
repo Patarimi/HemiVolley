@@ -79,13 +79,13 @@ function universe(size, g){
 		this.ctx_decors.font = Typo;
 		this.ctx_decors.fillStyle = "black";
 		if(diff <=1){
-			i = Math.round((ListeComSetJst.length-1)*Math.random());
+			var i = Math.round((ListeComSetJst.length-1)*Math.random());
 			this.ctx_decors.fillText(this.CreaTexteVictoire(ListeComSetJst[i], Vainqueur), posText.x, posText.y);
 		}else if(diff == this.manche_max){
-			i = Math.round((ListeComSetPft.length-1)*Math.random());
+			var i = Math.round((ListeComSetPft.length-1)*Math.random());
 			this.ctx_decors.fillText(this.CreaTexteVictoire(ListeComSetPft[i], Vainqueur), posText.x, posText.y);
 		}else{
-			i = Math.round((ListeComSetStd.length-1)*Math.random());
+			var i = Math.round((ListeComSetStd.length-1)*Math.random());
 			this.ctx_decors.fillText(this.CreaTexteVictoire(ListeComSetStd[i], Vainqueur), posText.x, posText.y);
 		}
 		this.ctx_decors.drawText("Appuyer sur P pour lancer", posText.x, posText.y+Interligne);
@@ -95,13 +95,13 @@ function universe(size, g){
 		this.ctx_decors.font = Typo;
 		this.ctx_decors.fillStyle = "black";
 		if(diff <=1){
-			i = Math.round((ListeComJst.length-1)*Math.random());
+			var i = Math.round((ListeComJst.length-1)*Math.random());
 			this.ctx_decors.fillText(ListeComJst[i], posText.x, posText.y);
 		}else if(diff == this.manche_max){
-			i = Math.round((ListeComPft.length-1)*Math.random());
+			var i = Math.round((ListeComPft.length-1)*Math.random());
 			this.ctx_decors.fillText(ListeComPft[i], posText.x, posText.y);
 		}else{
-			i = Math.round((ListeComStd.length-1)*Math.random());
+			var i = Math.round((ListeComStd.length-1)*Math.random());
 			this.ctx_decors.fillText(ListeComStd[i], posText.x, posText.y);
 		}
 	}
@@ -111,7 +111,7 @@ function universe(size, g){
 	
 	this.CreaTexteVictoire=function(Texte, VainqueurName){
 			if(/<NAME>/i.test(Texte)){
-				i = Texte.indexOf("<NAME>");
+				var i = Texte.indexOf("<NAME>");
 				return Texte.substring(0, i)+VainqueurName+Texte.substring(i+6);
 			}else{
 				return Texte;
