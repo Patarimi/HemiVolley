@@ -5,7 +5,6 @@ function ball(p0, v0, rayon, context_name){
 	this.ctx_b = document.getElementById(context_name).getContext('2d');
 	this.E_tot = Math.pow(v0.norme(), 2)/2+this.m.rayon*env.g*(this.max.y-p0.y);
 	this.drawVitesse = false;
-	this.drawIsVect;
 	var preRenduC = document.createElement('canvas');
 	preRenduC.width = 2*rayon;
 	preRenduC.height = 2*rayon;
@@ -41,8 +40,8 @@ function ball(p0, v0, rayon, context_name){
 		var iball = new Image();
 		var rayon = this.m.rayon;
 		iball.onload = function(){
-			iball_height = 210;
-			iball_width = 210;
+			var iball_height = 210;
+			var iball_width = 210;
 			preRendu.drawImage(iball, 0, 0, iball_height, iball_width, 0, 0, 2*rayon, 2*rayon);
 		}
 		iball.src = "images/volley-ball2.png";

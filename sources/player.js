@@ -103,7 +103,7 @@ function player(p0, v0, rayon, context_name){
 		var h = preRenduC.height;
 		var collide = false;
 		var ctxImg = ctx.getImageData(this.m.p.x-this.m.rayon, this.m.p.y-this.m.rayon, w, h);
-		for(i=3;i<=w*h;i+=4){
+		for(var i=3;i<=w*h;i+=4){
 			if(preRenduImg.data[i]!=0){
 				if(ctxImg.data[i]!=0){
 					this.canCollide = 8;
