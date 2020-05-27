@@ -26,8 +26,6 @@ function player(p0, v0, rayon, context_name){
 		this.min = new vector(rayon, rayon);
 		this.max = new vector(env.filet.p.x-rayon-1, env.jouable.y);
 	}
-	var oeil = 0.6;
-	var pupille = 0.2;
 
 	this.getNextSpeed = function(){
 		var n_v = this.m.getNextSpeed(env.g);
